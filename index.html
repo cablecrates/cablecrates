@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cable Crates - Internet & Cable Plans</title>
+  <meta name="description" content="Compare and choose top cable & internet plans. No hidden fees. 24/7 support. Get your best offer today!">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    :root {
+      --primary: #077af5;
+      --accent: #0c1220;
+      --glass: rgba(30,40,60,0.70);
+      --white: #fff;
+      --bg: #f6f9fc;
+      --fade: 0.4s cubic-bezier(.4,0,.2,1);
+      --radius: 20px;
+    }
+    html, body {
+      margin: 0; padding: 0;
+      font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+      background: var(--bg);
+      color: #21242a;
+      scroll-behavior: smooth;
+    }
+    /* Header Glassmorphism */
+    header {
+      position: fixed;
+      top: 0; left: 0; width: 100vw;
+      z-index: 1000;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 18px 40px;
+      background: var(--glass);
+      box-shadow: 0 4px 24px 0 rgba(30,40,60,0.08);
+      border-radius: 0 0 var(--radius) var(--radius);
+      transition: transform var(--fade), background var(--fade);
+      backdrop-filter: blur(12px);
+      box-sizing: border-box;
+      max-width: 100vw;
+      overflow-x: hidden;
+    }
+    .logo {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: 1px;
+    }
+    nav ul {
+      list-style: none; margin: 0; padding: 0; display: flex; gap: 28px;
+    }
+    nav a {
+      color: var(--white); font-weight: 500; text-decoration: none;
+      font-size: 1rem; transition: color 0.2s;
+    }
+    nav a:hover { color: var(--primary); }
+    .cta-btn {
+      background: var(--primary);
+      color: var(--white);
+      border: none; border-radius: var(--radius);
+      font-size: 1.07rem; font-weight: 600; padding: 12px 32px;
+      box-shadow: 0 2px 8px rgba(7,122,245,0.15);
+      cursor: pointer; margin-left: 18px;
+      transition: background 0.2s;
+    }
+    .cta-btn:hover { background: #035dc6; }
+    /* Hide on scroll */
+    .header--hidden { transform: translateY(-100%); }
+    /* Hero */
+    .hero {
+      height: 100vh;
+      min-height: 600px;
+      width: 100%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .hero-bg video,
+    .hero-bg img {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: 1;
+    }
+    .hero-overlay {
+      position: absolute; top:0; left:0; width:100%; height:100%;
+      background: linear-gradient(135deg,rgba(15,24,45,0.84) 70%,rgba(7,122,245,0.17));
+      z-index:2;
+    }
+    .hero-content {
+      position: relative; z-index: 3;
+      color: #fff;
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 40px 24px;
+      animation: fadeInUp 1.2s;
+    }
+    .hero h1 { font-size: 2.7rem; margin: 0 0 18px; font-weight: 800; letter-spacing: 1px;}
+    .hero p { font-size: 1.23rem; margin-bottom: 32px; }
+    .hero .hero-cta {
+      font-size: 1.1rem;
+      padding: 14px 42px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-weight: 700;
+      box-shadow: 0 4px 16px rgba(7,122,245,0.12);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .hero .hero-cta:hover { background: #025bb2; }
+    /* Section base */
+    section { padding: 60px 0 30px 0; }
+    .container { max-width: 1150px; margin: 0 auto; padding: 0 20px;}
+    /* About */
+    
+    /* Services */
+    .services-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 32px;
+      margin-top: 36px;
+      justify-content: center;
+    }
+    .service-card {
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: 0 2px 18px rgba(7,122,245,0.05);
+      padding: 30px 20px 28px;
+      min-width: 210px; max-width: 300px;
+      flex: 1 1 270px;
+      text-align: center;
+      transition: box-shadow 0.2s, transform 0.2s;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .service-card:hover {
+      box-shadow: 0 6px 30px rgba(7,122,245,0.13);
+      transform: translateY(-6px) scale(1.035);
+    }
+    .service-card i {
+      font-size: 2rem; color: var(--primary); margin-bottom: 18px;
+    }
+    .service-card h4 { margin-bottom: 10px; color: var(--accent);}
+    .service-card p { font-size: 1rem; color: #38415a;}
+    .service-card a {
+      color: var(--primary); font-size: 1rem; text-decoration: underline;
+      font-weight: 500; margin-top: 8px; display: inline-block;
+    }
+    /* Disclaimer */
+    .disclaimer {
+      width: 100%; background: #eaf4ff;
+      color: #2b2f3e; border-radius: var(--radius);
+      padding: 20px 30px; margin: 40px auto 0 auto;
+      font-size: 1rem;
+      text-align: center;
+      box-shadow: 0 1px 10px rgba(7,122,245,0.07);
+      max-width: 800px;
+    }
+    .disclaimer a { color: var(--primary); text-decoration: underline;}
+    /* FAQ Accordion */
+    .faq-section { max-width: 780px; margin: 0 auto; }
+    .faq-list { margin-top: 30px;}
+    .faq-item {
+      background: #fff;
+      margin-bottom: 16px;
+      border-radius: var(--radius);
+      box-shadow: 0 2px 14px rgba(7,122,245,0.07);
+      overflow: hidden;
+      transition: box-shadow 0.2s;
+    }
+    .faq-q {
+      padding: 18px 32px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--accent);
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 1.11rem;
+      transition: background 0.17s;
+    }
+    .faq-q:hover { background: #f2f6fa; }
+    .faq-a {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(.4,0,.2,1);
+      background: #f9fbfd;
+      font-size: 1rem;
+      color: #4a526b;
+      padding: 0 32px;
+    }
+    .faq-item.active .faq-a {
+      max-height: 150px; /* enough for content */
+      padding: 18px 32px;
+    }
+    .faq-item.active { box-shadow: 0 4px 24px rgba(7,122,245,0.11);}
+    /* Contact */
+    .contact-wrap {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+      margin-top: 36px;
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: 0 2px 18px rgba(7,122,245,0.06);
+      padding: 38px 30px;
+    }
+    .contact-info { flex: 1 1 280px; min-width: 220px; }
+    .contact-info h3 { margin-top: 0; }
+    .contact-info ul { padding: 0; list-style: none; margin: 18px 0 0 0;}
+    .contact-info li { margin-bottom: 12px; font-size: 1.04rem;}
+    .contact-form-wrap { flex: 2 1 380px; min-width: 280px; }
+    .contact-form input, .contact-form select, .contact-form textarea {
+      width: 100%; margin-bottom: 14px; padding: 12px;
+      border: 1px solid #e1e5ee; border-radius: 7px; font-size: 1rem;
+      font-family: inherit;
+      background: #f9fbfd;
+      resize: vertical;
+      transition: border 0.2s;
+    }
+    .contact-form input:focus, .contact-form textarea:focus, .contact-form select:focus {
+      border: 1.7px solid var(--primary);
+      outline: none;
+    }
+    .contact-form button {
+      background: var(--primary);
+      color: #fff; border: none; border-radius: 7px;
+      font-size: 1.08rem; padding: 12px 32px;
+      font-weight: 700; cursor: pointer;
+      transition: background 0.18s;
+    }
+    .contact-form button:hover { background: #0263c7; }
+    .success-msg {
+      background: #d0ffd7; color: #147133;
+      border-radius: 8px; padding: 12px 16px;
+      font-size: 1.05rem; margin-bottom: 16px;
+      display: none;
+    }
+    /* Footer */
+    footer {
+      background: var(--accent);
+      color: #eaf4ff;
+      padding: 40px 0 18px 0;
+      margin-top: 46px;
+    }
+    .footer-container {
+      max-width: 1150px; margin: 0 auto; padding: 0 20px;
+      display: flex; flex-wrap: wrap;
+      gap: 46px; justify-content: space-between; align-items: flex-start;
+    }
+    .footer-col { flex: 1 1 160px; min-width: 150px; }
+    .footer-col h4 { color: #fff; font-size: 1.08rem; margin-bottom: 14px;}
+    .footer-col ul { list-style: none; padding: 0;}
+    .footer-col ul li { margin-bottom: 11px;}
+    .footer-col a { color: #a6caff; text-decoration: none; font-size: 1rem;}
+    .footer-col a:hover { text-decoration: underline;}
+    .footer-social { margin-top: 14px;}
+    .footer-social a {
+      margin-right: 12px; color: #fff; font-size: 1.23rem;
+      display: inline-block; transition: color 0.2s;
+    }
+    .footer-social a:hover { color: var(--primary);}
+    .footer-copy { text-align: center; margin-top: 30px; color: #adc2dc; font-size: 0.98rem;}
+    /* Animations */
+    @keyframes fadeInUp {
+      from { opacity:0; transform: translateY(30px);}
+      to { opacity:1; transform: translateY(0);}
+    }
+    /* Responsive */
+    @media (max-width:900px){
+      .about-cards, .services-row, .footer-container { flex-wrap: wrap; gap: 22px;}
+      header { padding: 14px 14px;}
+    }
+    @media (max-width:700px){
+      .hero h1 { font-size: 1.45rem;}
+      .hero p { font-size: 1.06rem;}
+      .container, .footer-container, .contact-wrap { padding: 0 8px;}
+      .about-cards, .services-row { flex-direction: column;}
+      .contact-wrap { flex-direction: column;}
+      .footer-container { flex-direction: column;}
+      header { padding: 7px 6px;}
+      .logo { font-size: 1.13rem;}
+      .cta-btn { font-size: 0.95rem; padding: 8px 18px;}
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header id="siteHeader">
+    <div class="logo">Cable Crates</div>
+    <nav>
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <a href="#contact"><button class="cta-btn">Get My Offer</button></a>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" id="home">
+    <div class="hero-bg">
+    <!-- Replace src with your preferred background video and poster image -->
+    <video autoplay muted loop playsinline poster="" id="heroVideo">
+      <source src="cablecrate.mp4" type="video/mp4">
+    </video>
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="hero-content">
+      <h1>Reliable Internet & Cable Wherever You Are</h1>
+      <p>Compare top plans in one place—no hidden fees. 24/7 support, instant installation!</p>
+      <a href="tel:+1(888) 768-7061"><button class="hero-cta">Call Now for Offers</button></a>
+    </div>
+  </section>
+
+  <!-- About Us -->
+<section id="about" style="background: #fff; padding: 70px 0 60px 0; color: #21242a;">
+    <div class="container" style="display: flex; flex-wrap: wrap; align-items: center; gap: 48px;">
+        <!-- Visual/Illustration: Single Relevant Image -->
+        <div style="flex:1 1 340px; min-width:270px; display:flex; flex-direction:column; align-items:center; gap:18px;">
+            <img src="44.avif" alt="Internet cables and router" style="width:240px; height:180px; object-fit:cover; border-radius:18px; box-shadow:0 6px 32px rgba(7,122,245,0.18); border:6px solid #fff;">
+        </div>
+        <!-- Text Content -->
+        <div style="flex:2 1 420px; min-width:270px;">
+            <div style="font-size:1.05rem; font-weight:700; letter-spacing:0.5px; color:#e97b2a; margin-bottom:10px;">
+                ABOUT CABLE CRATES
+            </div>
+            <h2 style="font-size:2.3rem; font-weight:800; margin:0 0 18px 0; line-height:1.15;">
+                Empowering Your Digital Life
+            </h2>
+            <p style="color:#38415a; max-width:520px; margin-bottom:28px; font-size:1.13rem;">
+                At Cable Crates, we believe everyone deserves fast, secure, and affordable connectivity. Our mission is to deliver top-tier internet and cable solutions—backed by eco-friendly practices and a passion for customer satisfaction. Whether you stream, work, or play, we keep you connected to what matters most.
+            </p>
+            <div style="display:flex; gap:32px; flex-wrap:wrap; margin-bottom:18px;">
+                <div style="text-align:center;">
+                    <i class="fas fa-bolt" style="font-size:2.1rem; color:#fff; background:#0bb89b; border-radius:50%; padding:12px 15px; box-shadow:0 2px 10px rgba(11,184,155,0.13);"></i>
+                    <div style="font-weight:600; margin-top:10px; color:#21242a; font-size:1.05rem;">Ultra-Fast<br>Speeds</div>
+                </div>
+                <div style="text-align:center;">
+                    <i class="fas fa-leaf" style="font-size:2.1rem; color:#fff; background:#077af5; border-radius:50%; padding:12px 15px; box-shadow:0 2px 10px rgba(7,122,245,0.13);"></i>
+                    <div style="font-weight:600; margin-top:10px; color:#21242a; font-size:1.05rem;">Eco-Friendly<br>Approach</div>
+                </div>
+                <div style="text-align:center;">
+                    <i class="fas fa-headset" style="font-size:2.1rem; color:#fff; background:#0c1220; border-radius:50%; padding:12px 15px; box-shadow:0 2px 10px rgba(12,18,32,0.13);"></i>
+                    <div style="font-weight:600; margin-top:10px; color:#21242a; font-size:1.05rem;">24/7<br>Support</div>
+                </div>
+            </div>
+            <a href="#contact"><button class="cta-btn" style="margin-left:0; background:#077af5; color:#fff;">Learn More</button></a>
+        </div>
+    </div>
+</section>
+<section id="services"></section>
+    <div class="container">
+        <div style="text-align:center; margin-bottom: 18px;">
+            <div style="color:#e97b2a;font-size:0.97rem;font-weight:700;letter-spacing:0.5px;">
+                GUARANTEED SPEEDS AND A RELIABLE CONNECTION
+            </div>
+            <h2 style="font-size:2.2rem;font-weight:800;margin:8px 0 0 0;letter-spacing:1px;">
+                Explore Our Services
+            </h2>
+        </div>
+        <div class="services-row" style="margin-top:38px;">
+            <div class="service-card">
+                <i class="fas fa-wifi"></i>
+                <h4>High Speed Internet</h4>
+                <p>Experience blazing fast internet tailored to your streaming, gaming, and family needs. Check your current speed or get a recommendation for optimal performance.</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-satellite-dish"></i>
+                <h4>Satellite TV</h4>
+                <p>We provide comprehensive comparisons of satellite TV deals, allowing you to choose the best option for your entertainment needs.</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-tv"></i>
+                <h4>Cable TV</h4>
+                <p>Explore a wide range of TV services, including both cable and satellite options, with unbeatable deals to enhance your viewing experience.</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-home"></i>
+                <h4>Home Security</h4>
+                <p>Protect your home with our security systems, including 24/7 monitoring and smart home integration.</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-tools"></i>
+                <h4>Free Installation</h4>
+                <p>Enjoy hassle-free setup with free installation from most providers. Some may charge a small activation fee.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Our Deals / Plans Section -->
+<section id="deals" style="background:#f6f9fc;padding:80px 0 60px 0;">
+    <style>
+        /* Deals Section Advanced Styles */
+        #deals .plans-row {
+            display: flex;
+            flex-wrap: nowrap; /* Force all plans in one row */
+            gap: 38px;
+            justify-content: center;
+            margin-top: 48px;
+            overflow-x: auto;
+            overflow: visible;
+        }
+        .plan-card {
+            background: #fff;
+            border-radius: 28px;
+            box-shadow: 0 4px 32px rgba(7,122,245,0.11);
+            padding: 44px 32px 38px 32px;
+            min-width: 240px;
+            max-width: 340px;
+            flex: 1 1 300px;
+            text-align: center;
+            position: relative;
+            transition: transform 0.25s cubic-bezier(.4,0,.2,1), box-shadow 0.25s cubic-bezier(.4,0,.2,1);
+            border: 2px solid transparent;
+            z-index: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        .plan-card:hover {
+            transform: translateY(-6px) scale(1.015);
+            box-shadow: 0 8px 40px rgba(7,122,245,0.18);
+            border-color: #077af5;
+        }
+        }
+        .plan-card .plan-badge {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #077af5;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 700;
+            padding: 6px 22px;
+            border-radius: 14px;
+            box-shadow: 0 2px 8px rgba(7,122,245,0.13);
+            letter-spacing: 0.5px;
+            z-index: 2;
+            animation: fadeInUp 0.8s;
+        }
+        .plan-card .plan-title {
+            font-size: 1.18rem;
+            font-weight: 700;
+            color: #077af5;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+        .plan-card .plan-price {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #0c1220;
+            margin-bottom: 10px;
+        }
+        .plan-card .plan-price span {
+            font-size: 1.15rem;
+            font-weight: 500;
+            color: #38415a;
+        }
+        .plan-card .plan-desc {
+            color: #3a425a;
+            margin-bottom: 22px;
+            font-size: 1.08rem;
+            min-height: 48px;
+        }
+        .plan-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 22px 0;
+            color: #38415a;
+            font-size: 1.05rem;
+            text-align: left;
+            min-height: 90px;
+        }
+        .plan-card ul li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            transition: color 0.2s;
+        }
+        .plan-card:hover ul li {
+            color: #077af5;
+        }
+        .plan-card .cta-btn {
+            width: 200px;
+            font-size: 1.13rem;
+            padding: 14px 0;
+            border-radius: 12px;
+            margin-top: auto;
+            background: linear-gradient(90deg,#077af5 60%,#0bb89b 100%);
+            box-shadow: 0 2px 12px rgba(7,122,245,0.11);
+            transition: background 0.18s, box-shadow 0.18s;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .plan-card .cta-btn:hover {
+            background: linear-gradient(90deg,#035dc6 60%,#0bb89b 100%);
+            box-shadow: 0 6px 24px rgba(7,122,245,0.18);
+        }
+        /* Responsive */
+        @media (max-width:1100px){
+            #deals .plans-row { gap: 22px; }
+            .plan-card { max-width: 370px; min-width: 220px; padding: 34px 18px 30px 18px;}
+        }
+        @media (max-width:900px){
+            #deals .plans-row { flex-wrap: nowrap; gap: 18px; overflow-x: auto;}
+            .plan-card { min-width: 260px; max-width: 100%; }
+        }
+        @media (max-width:700px){
+            #deals { padding: 38px 0 24px 0 !important; }
+            #deals .plans-row { flex-direction: row; gap: 18px; overflow-x: auto;}
+            .plan-card { min-width: 240px; max-width: 100%; padding: 24px 8px 22px 8px;}
+            .plan-card .plan-title { font-size: 1.05rem;}
+            .plan-card .plan-price { font-size: 1.5rem;}
+            .plan-card ul { font-size: 0.98rem;}
+            .plan-card .cta-btn { font-size: 1rem; width: 100%; }
+        }
+    </style>
+    <div class="container">
+        <div style="text-align:center; margin-bottom: 28px;">
+            <div style="color:#e97b2a;font-size:1.07rem;font-weight:700;letter-spacing:0.5px;">
+                EXPLORE OUR DEALS
+            </div>
+            <h2 style="font-size:2.5rem;font-weight:800;margin:12px 0 0 0;letter-spacing:1px;">
+                Our Best Plans for You
+            </h2>
+            <p style="color:#3a425a;max-width:600px;margin:18px auto 0;font-size:1.13rem;">
+                Choose the perfect plan for your needs—no hidden fees, flexible options, and 24/7 support.
+            </p>
+        </div>
+        <div class="plans-row">
+            <!-- Plan 1 -->
+            <div class="plan-card">
+                <div class="plan-title">Starter Internet</div>
+                <div class="plan-price">$29<span>/mo</span></div>
+                <div class="plan-desc">Up to 100 Mbps<br>Unlimited Data</div>
+                <ul>
+                    <li><i class="fas fa-check" style="color:#0bb89b;"></i>Free Installation</li>
+                    <li><i class="fas fa-check" style="color:#0bb89b;"></i>No Contract</li>
+                    <li><i class="fas fa-check" style="color:#0bb89b;"></i>24/7 Support</li>
+                </ul>
+                <a href="#contact"><button class="cta-btn">Get Started</button></a>
+            </div>
+            <!-- Plan 2 -->
+            <div class="plan-card" style="border-color:#077af5;box-shadow:0 8px 40px rgba(7,122,245,0.18);z-index:2;">
+                <div class="plan-title">Family Bundle</div>
+                <div class="plan-price">$49<span>/mo</span></div>
+                <div class="plan-desc">Up to 500 Mbps<br>Internet + Cable TV</div>
+                <ul>
+                    <li><i class="fas fa-check" style="color:#0bb89b;"></i>Free HD Channels</li>
+                    <li><i class="fas fa-check" style="color:#0bb89b;"></i>Unlimited Data</li>
+                    <li><i class="fas fa-check" style="color:#0bb89b;"></i>WiFi Router Included</li>
+                </ul>
+                <a href="#contact"><button class="cta-btn">Get Started</button></a>
+            </div>
+            <!-- Plan 3 -->
+            <div class="plan-card">
+                <div class="plan-title">Ultimate Pro</div>
+                <div class="plan-price">$79<span>/mo</span></div>
+                <div class="plan-desc">Up to 1 Gbps<br>Internet + TV + Security</div>
+                <ul>
+                    <li><i class="fas fa-check" style="color:#0bb89b;"></i>Smart Home Security</li>
+                    <li><i class="fas fa-check" style="color:#0bb89b;"></i>Premium Support</li>
+                    <li><i class="fas fa-check" style="color:#0bb89b;"></i>Free Streaming Device</li>
+                </ul>
+                <a href="#contact"><button class="cta-btn">Get Started</button></a>
+            </div>
+        </div>
+        <div style="text-align:center;margin-top:32px;color:#38415a;font-size:1.08rem;">
+            All plans include free installation and a 30-day money-back guarantee.
+        </div>
+    </div>
+</section>
+
+<!-- Why Choose Us Section -->
+<section style="background:#fff;padding:54px 0 36px 0;">
+    <div class="container" style="display:flex;flex-wrap:wrap;align-items:center;gap:48px;">
+        <!-- Visuals: Cable/Internet Related Images -->
+        <div style="flex:1 1 340px;min-width:270px;display:flex;flex-direction:column;align-items:center;gap:18px;">
+            <div style="display:flex;gap:18px;">
+                <img src="22.avif" alt="Ethernet cables" style="width:130px;height:90px;object-fit:cover;border-radius:16px;box-shadow:0 2px 12px rgba(7,122,245,0.10);" />
+                <img src="11.avif" alt="WiFi router" style="width:130px;height:90px;object-fit:cover;border-radius:16px;box-shadow:0 2px 12px rgba(7,122,245,0.10);" />
+            </div>
+            <img src="33.avif" alt="Person using laptop with fast internet" style="width:210px;height:140px;object-fit:cover;border-radius:18px;box-shadow:0 4px 24px rgba(7,122,245,0.13);" />
+        </div>
+        <!-- Text Content -->
+        <div style="flex:2 1 420px;min-width:270px;">
+            <h2 style="color:#3a425a;font-size:2rem;font-weight:800;margin:0 0 16px 0;">Connecting You to What Matters Most</h2>
+            <p style="color:#3a425a;max-width:520px;margin-bottom:22px;">
+                Experience ultra-fast internet and crystal-clear cable TV for your home or business. Our team is dedicated to keeping you connected with reliable service, affordable plans, and friendly support—so you can stream, work, and play without limits.
+            </p>
+            <div style="display:flex;gap:38px;flex-wrap:wrap;margin-bottom:18px;">
+                <div style="text-align:center;">
+                    <div style="font-size:1.7rem;font-weight:800;color:#077af5;">99%</div>
+                    <div style="font-size:1rem;color:#38415a;">Network Reliability</div>
+                </div>
+                <div style="text-align:center;">
+                    <div style="font-size:1.7rem;font-weight:800;color:#077af5;">24/7</div>
+                    <div style="font-size:1rem;color:#38415a;">Customer Support</div>
+                </div>
+                <div style="text-align:center;">
+                    <div style="font-size:1.7rem;font-weight:800;color:#077af5;">1000+</div>
+                    <div style="font-size:1rem;color:#38415a;">Happy Customers</div>
+                </div>
+            </div>
+            <a href="tel:+1(888) 768-7061"><button class="cta-btn" style="margin-left:0;">Call Now</button></a>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section id="testimonials" style="background:linear-gradient(120deg,#077af5 0%,#0bb89b 100%);padding:70px 0 60px 0;">
+    <div class="container">
+        <div style="text-align:center;margin-bottom:32px;">
+            <div style="color:#fff;font-size:1.05rem;font-weight:700;letter-spacing:0.5px;">
+                WHAT OUR CUSTOMERS SAY
+            </div>
+            <h2 style="font-size:2.2rem;font-weight:800;margin:8px 0 0 0;letter-spacing:1px;color:#fff;">
+                Real Stories, Real Satisfaction
+            </h2>
+        </div>
+        <div style="display:flex;gap:36px;flex-wrap:wrap;justify-content:center;">
+            <!-- Testimonial 1 -->
+            <div style="background:#fff;border-radius:22px;box-shadow:0 2px 18px rgba(7,122,245,0.09);padding:32px 26px;max-width:340px;flex:1 1 260px;display:flex;flex-direction:column;align-items:center;text-align:center;">
+                <img src="3.jpg" alt="Customer" style="width:64px;height:64px;border-radius:50%;object-fit:cover;margin-bottom:14px;border:3px solid #077af5;">
+                <div style="font-size:1.08rem;color:#38415a;margin-bottom:14px;font-style:italic;">
+                    “Switching to Cable Crates was the best decision! My streaming never buffers and the support team is always helpful.”
+                </div>
+                <div style="font-weight:700;color:#077af5;">Jessica M.</div>
+                <div style="font-size:0.97rem;color:#0bb89b;">Home Internet + TV</div>
+            </div>
+            <!-- Testimonial 2 -->
+            <div style="background:#fff;border-radius:22px;box-shadow:0 2px 18px rgba(7,122,245,0.09);padding:32px 26px;max-width:340px;flex:1 1 260px;display:flex;flex-direction:column;align-items:center;text-align:center;">
+                <img src="2.jpg" alt="Customer" style="width:64px;height:64px;border-radius:50%;object-fit:cover;margin-bottom:14px;border:3px solid #0bb89b;">
+                <div style="font-size:1.08rem;color:#38415a;margin-bottom:14px;font-style:italic;">
+                    “Installation was quick and free. I love the eco-friendly approach and the bundle saved me money every month.”
+                </div>
+                <div style="font-weight:700;color:#0bb89b;">David R.</div>
+                <div style="font-size:0.97rem;color:#077af5;">Family Bundle</div>
+            </div>
+            <!-- Testimonial 3 -->
+            <div style="background:#fff;border-radius:22px;box-shadow:0 2px 18px rgba(7,122,245,0.09);padding:32px 26px;max-width:340px;flex:1 1 260px;display:flex;flex-direction:column;align-items:center;text-align:center;">
+                <img src="1.jpg" alt="Customer" style="width:64px;height:64px;border-radius:50%;object-fit:cover;margin-bottom:14px;border:3px solid #0c1220;">
+                <div style="font-size:1.08rem;color:#38415a;margin-bottom:14px;font-style:italic;">
+                    “Reliable connection for my home office and security system. Highly recommend Cable Crates for any small business!”
+                </div>
+                <div style="font-weight:700;color:#0c1220;">Alex P.</div>
+                <div style="font-size:0.97rem;color:#0bb89b;">Ultimate Pro Plan</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Disclaimer Section -->
+<section style="background:#fff; padding: 36px 0 0 0;"></section>
+<div class="disclaimer" style="background:#fff; color:#2b2f3e; border:1.5px solid #eaf4ff; box-shadow:0 1px 10px rgba(7,122,245,0.07); max-width:900px; margin:40px auto 0 auto; border-radius:20px; padding:38px 30px 32px 30px;">
+    <h2 style="color:#3a425a; font-size:2rem; font-weight:800; margin:0 0 22px 0; text-align:center;">Disclaimer</h2>
+    <div style="font-size:1.13rem; color:#38415a; text-align:center; max-width:760px; margin:0 auto 10px auto;">
+        The information provided on this website is for general informational purposes only. Cable Crates makes no representations or warranties of any kind, express or implied, about the completeness, accuracy, reliability, suitability, or availability of the information, products, or services contained on this website.
+    </div>
+    <div style="font-size:1.08rem; color:#38415a; text-align:center; margin-top:18px;">
+        Any reliance you place on such information is therefore strictly at your own risk.
+    </div>
+</div>
+</section>
+
+  <!-- FAQ -->
+<section id="faq" class="faq-section">
+    <h2 style="text-align:center;">Frequently Asked Questions</h2>
+    <div class="faq-list">
+        <div class="faq-item">
+            <div class="faq-q">What services does Cable Crates offer?<i class="fas fa-chevron-down"></i></div>
+            <div class="faq-a">
+                Cable Crates provides a range of connectivity solutions including high-speed internet, cellular plans, bundled packages, and streaming services. As a certified JNA dealer, we offer services from top providers, ensuring you have access to the best options for your home or business.
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">What companies are serviceable through Cable Crates and JNA?<i class="fas fa-chevron-down"></i></div>
+            <div class="faq-a">
+                As a certified JNA dealer, Cable Crates offers services from leading companies, including:<br>
+                <ul style="margin:10px 0 0 18px; color:#38415a;">
+                    <li>Paramount+</li>
+                    <li>SHOWTIME®</li>
+                    <li>AT&amp;T</li>
+                    <li>Verizon</li>
+                    <li>Spectrum</li>
+                    <li>Comcast Xfinity</li>
+                    <li>Frontier</li>
+                    <li>HughesNet</li>
+                    <li>CenturyLink</li>
+                    <li>...and many more.</li>
+                </ul>
+                Through our partnerships, we ensure you have access to reliable and diverse service options.
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">Is Cable Crates a service provider?<i class="fas fa-chevron-down"></i></div>
+            <div class="faq-a">
+                Cable Crates is an authorized dealer and certified retailer, but we are not a direct service provider. We work with leading service providers like those listed above to connect you to their offerings, ensuring you receive the best possible service.
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">What are Cable Crates' execution charges?<i class="fas fa-chevron-down"></i></div>
+            <div class="faq-a">
+                Cable Crates charges for its execution services, which include setting up new connections, processing bill payments, plan upgrades, account cancellations, and other administrative tasks. These charges range from $49.99 to $199.99, depending on the service request, and are separate from the billing charges of the service providers you’re signed up with.
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">Why are Cable Crates’ execution charges separate from my service provider’s billing?<i class="fas fa-chevron-down"></i></div>
+            <div class="faq-a">
+                As a separate entity, Cable Crates handles the execution of your service requests independently. Our charges cover the work required to manage and complete requests like plan upgrades, new installations, or account changes. These execution fees are distinct from your provider’s billing, which covers your actual internet, cellular, or streaming service.
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">How do I contact Cable Crates for support?<i class="fas fa-chevron-down"></i></div>
+            <div class="faq-a">
+                You can reach out to our customer support team through the contact form on our website or by calling us directly on the assistance number provided below. Our team is available to assist you with any inquiries, service requests, or troubleshooting needs.
+            </div>
+        </div>
+    </div>
+</section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <div class="container">
+      <h2 style="text-align:center;">Get in Touch</h2>
+      <div class="contact-wrap">
+        <div class="contact-info">
+          <h3>Contact Details</h3>
+          <ul>
+        
+            <li><i class="fas fa-phone-alt"></i> <a href="tel:+1(888) 768-7061" style="color:#077af5;">(888) 768-7061</a></li>
+        
+          </ul>
+        </div>
+        <div class="contact-form-wrap">
+          <form class="contact-form" id="contactForm" autocomplete="off" novalidate>
+            <div class="success-msg" id="successMsg">Thank you! We'll get back to you soon.</div>
+            <input type="text" name="name" placeholder="Your Name*" required aria-label="Name" />
+            <input type="email" name="email" placeholder="Your Email*" required aria-label="Email" />
+            <input type="tel" name="phone" placeholder="Your Phone*" required aria-label="Phone" />
+            <select name="interest" required aria-label="Service Interest">
+              <option value="">Select Service Interest*</option>
+              <option>Home Internet</option>
+              <option>Mobile Data Plans</option>
+              <option>Cable TV Packages</option>
+              <option>Streaming Bundles</option>
+              <option>Business Solutions</option>
+              <option>Installation & Support</option>
+            </select>
+            <textarea name="message" placeholder="Your Message*" required rows="3" aria-label="Message"></textarea>
+            <button type="submit">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+<footer>
+    <div class="footer-container" style="gap: 60px; align-items: flex-start;">
+        <div class="footer-col" style="flex:2 1 320px; min-width:220px;">
+            <div style="font-size:1.35rem;font-weight:800;letter-spacing:1px;color:#fff;margin-bottom:10px;">CABLE CRATES</div>
+            <div style="color:#adc2dc;font-size:1.05rem;line-height:1.7;">
+                Cable Crates is a certified JNA dealer connecting homes and businesses with high-speed internet, phone, and streaming solutions from top providers.<br>
+                We make connectivity fast, secure, and seamless.<br>
+                We help you find the best plans and ensure smooth setup, so you stay connected hassle-free.
+            </div>
+        </div>
+        <div class="footer-col" style="flex:1 1 180px; min-width:160px;">
+            <div style="font-size:1.13rem;font-weight:700;color:#f2f6fa;margin-bottom:10px;">Contact</div>
+            <div style="color:#fff;font-size:1.07rem;margin-bottom:6px;">Phone: <a href="tel:18887687061" style="color:#fff;text-decoration:none;">(888) 768-7061</a></div>
+        </div>
+        <div class="footer-col" style="flex:2 1 260px; min-width:180px;">
+            <div style="font-size:1.13rem;font-weight:700;color:#fff;margin-bottom:10px;">Why Us</div>
+            <div style="color:#adc2dc;font-size:1.05rem;line-height:1.6;">
+                Ultra-fast connectivity, zero data limits, and reliable service across all regions — tailored for homes and businesses.
+            </div>
+        </div>
+    </div>
+    <div class="footer-copy" style="margin-top:30px;">
+        &copy; 2025 Cable Crates. All rights reserved.
+    </div>
+    <div style="text-align:center;margin-top:18px;">
+        <a href="privacy-policy.html" style="color:#a6caff;margin:0 12px;font-size:1rem;text-decoration:none;">Privacy Policy</a>
+        <a href="refund-policy.html" style="color:#a6caff;margin:0 12px;font-size:1rem;text-decoration:none;">Refund Policy</a>
+        <a href="terms-conditions.html" style="color:#a6caff;margin:0 12px;font-size:1rem;text-decoration:none;">Terms &amp; Conditions</a>
+    </div>
+</footer>
+
+  <!-- JS: Header auto-hide, FAQ, Form -->
+  <script>
+    // Header hide/show on scroll
+    let lastScroll = 0;
+    const header = document.getElementById('siteHeader');
+    window.addEventListener('scroll', function(){
+      let currentScroll = window.pageYOffset;
+      if(currentScroll <= 0){ header.classList.remove('header--hidden'); return; }
+      if(currentScroll > lastScroll){ header.classList.add('header--hidden'); }
+      else{ header.classList.remove('header--hidden'); }
+      lastScroll = currentScroll;
+    });
+
+    // FAQ Accordion
+    document.querySelectorAll('.faq-q').forEach((q) => {
+      q.addEventListener('click', function() {
+        let item = q.parentElement;
+        item.classList.toggle('active');
+      });
+    });
+
+    // Contact Form Validation + fake submit
+    const form = document.getElementById('contactForm');
+    const successMsg = document.getElementById('successMsg');
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      let valid = true;
+      form.querySelectorAll('input, select, textarea').forEach((el)=>{
+        if(!el.value) { el.style.border = "1.5px solid #eb3333"; valid = false;}
+        else { el.style.border = ""; }
+      });
+      if(!valid) return;
+      // Show success
+      successMsg.style.display = "block";
+      setTimeout(()=>{ successMsg.style.display = "none"; form.reset(); }, 3500);
+    });
+
+    // Hero video fallback for mobile/unsupported
+    const heroVideo = document.getElementById('heroVideo');
+    if(heroVideo){
+      heroVideo.onerror = function(){
+        heroVideo.style.display = "none";
+      }
+    }
+  </script>
+</body>
+</html>
